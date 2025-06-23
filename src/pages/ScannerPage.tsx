@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Camera, 
@@ -7,11 +7,15 @@ import {
   Star,
   ThumbsUp,
   MessageSquare,
-  Shield
+  Shield,
+  CheckCircle,
+  TrendingUp
 } from 'lucide-react'
 
 const ScannerPage = () => {
   const [isScanning, setIsScanning] = useState(false)
+  const [scanProgress, setScanProgress] = useState(0)
+  const [showSuccess, setShowSuccess] = useState(false)
   const [currentSample, setCurrentSample] = useState(0)
 
   const sampleResults = [
@@ -48,18 +52,63 @@ const ScannerPage = () => {
         "Heart-healthy option",
         "Great for busy mornings"
       ]
+    },
+    {
+      productName: "Organic Bananas, 2 lbs",
+      price: "$1.98",
+      rating: 4.9,
+      reviews: 892,
+      socialProof: {
+        trending: true,
+        friendsBought: 15,
+        communityChoice: true,
+        verifiedPurchases: 96
+      },
+      recommendations: [
+        "Always fresh and ripe",
+        "Perfect for smoothies",
+        "Great source of potassium"
+      ]
     }
   ]
 
   const currentResult = sampleResults[currentSample]
 
+  // Haptic feedback function for mobile devices
+  const triggerHapticFeedback = () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate([50, 30, 50])
+    }
+  }
+
   const handleStartScan = () => {
     setIsScanning(true)
-    setTimeout(() => {
-      setIsScanning(false)
-      // Switch to next sample
-      setCurrentSample((prev) => (prev + 1) % sampleResults.length)
-    }, 2000)
+    setShowSuccess(false)
+    setScanProgress(0)
+    triggerHapticFeedback()
+
+    // Simulate scanning progress
+    const progressInterval = setInterval(() => {
+      setScanProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval)
+          setTimeout(() => {
+            setIsScanning(false)
+            setShowSuccess(true)
+            triggerHapticFeedback()
+            // Switch to next sample
+            setCurrentSample((prev) => (prev + 1) % sampleResults.length)
+            
+            // Hide success after 2 seconds
+            setTimeout(() => {
+              setShowSuccess(false)
+            }, 2000)
+          }, 500)
+          return 100
+        }
+        return prev + 8
+      })
+    }, 100)
   }
 
   return (
@@ -71,50 +120,87 @@ const ScannerPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="page-title">Social Proof Scanner</h2>
+          <h2 className="page-title">
+            <Camera className="page-icon" />
+            Social Proof Scanner
+          </h2>
           <p className="page-description">
             Scan any product and instantly see what the Walmart community thinks. 
             Get real reviews, ratings, and trusted insights from millions of verified shoppers.
           </p>
         </motion.div>
 
-        {/* Quick Scan Button */}
+        {/* Enhanced Scanning Interface */}
         <motion.section 
-          className="quick-scan-section"
+          className="scanner-interface fade-in"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <div className="quick-scan-container">
+          <div className="scanner-viewport-container">
+            <div className={`scanner-viewport ${isScanning ? 'scanning' : ''}`}>
+              {/* Scanning Guidelines */}
+              <div className="scanner-guides">
+                <span className="guide-text">
+                  {isScanning ? 'Scanning...' : 'Place product here'}
+                </span>
+              </div>
+
+              {/* Scanning Line Animation */}
+              {isScanning && <div className="scan-line"></div>}
+
+              {/* Pulsing Light Effect */}
+              {isScanning && <div className="pulse-light"></div>}
+
+              {/* Success State */}
+              <div className={`scan-success ${showSuccess ? 'visible' : ''}`}>
+                <CheckCircle className="success-icon" />
+                <span className="success-text">Product Scanned!</span>
+              </div>
+            </div>
+
+            {/* Enhanced Scan Button */}
             <button 
-              className="quick-scan-button"
+              className={`enhanced-scan-button ${isScanning ? 'scanning' : ''}`}
               onClick={handleStartScan}
               disabled={isScanning}
             >
               <Camera className="scan-icon" />
-              <span>{isScanning ? 'Scanning...' : 'Scan Product'}</span>
-              {isScanning && <div className="scan-animation"></div>}
+              <span>{isScanning ? 'Scanning Product...' : 'Start Smart Scan'}</span>
             </button>
-            <p className="scan-hint">Tap to scan any product and see community insights</p>
+
+            {/* Progress Indicator */}
+            <div className={`scan-progress ${isScanning ? 'visible' : ''}`}>
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill" 
+                  style={{ width: `${scanProgress}%` }}
+                ></div>
+              </div>
+              <div className="progress-text">
+                {isScanning ? `Analyzing... ${Math.round(scanProgress)}%` : 'Ready to scan'}
+              </div>
+            </div>
           </div>
         </motion.section>
 
-        {/* Sample Scan Result - Always Visible */}
+        {/* Enhanced Scan Result */}
         <motion.section 
-          className="scan-result-section"
+          className="scan-result-section fade-in"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
           <div className="scan-result-card">
             <div className="scan-result-header">
-              <h3 className="scan-result-title">Sample Scan Result</h3>
+              <h3 className="scan-result-title">Community Insights</h3>
               <div className="scan-result-badge">
                 <Users className="badge-icon" />
                 <span>Community Verified</span>
               </div>
             </div>
-              <div className="product-info">
+            
+            <div className="product-info">
               <h4 className="product-name">{currentResult.productName}</h4>
               <div className="product-details">
                 <span className="product-price">{currentResult.price}</span>
@@ -127,7 +213,7 @@ const ScannerPage = () => {
             </div>
 
             <div className="social-proof-info">
-              <h5 className="social-proof-title">Community Insights</h5>
+              <h5 className="social-proof-title">Real-Time Community Data</h5>
               <div className="social-proof-stats">
                 <div className="social-stat">
                   <ThumbsUp className="social-stat-icon" />
@@ -166,6 +252,7 @@ const ScannerPage = () => {
 
             <div className="scan-result-actions">
               <button className="btn btn-primary">
+                <TrendingUp className="btn-icon" />
                 Add to Cart
               </button>
               <button className="btn btn-secondary">
@@ -176,8 +263,49 @@ const ScannerPage = () => {
                 onClick={handleStartScan}
                 disabled={isScanning}
               >
+                <Camera className="btn-icon" />
                 {isScanning ? 'Scanning...' : 'Scan Another Product'}
               </button>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Community Stats */}
+        <motion.section 
+          className="community-stats-section fade-in"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+        >
+          <h3 className="section-title">Community Impact</h3>
+          <div className="grid grid-4">
+            <div className="stat-card slide-in-left">
+              <MessageSquare className="stat-card-icon" />
+              <div className="stat-card-content">
+                <span className="stat-card-value">2.5M+</span>
+                <span className="stat-card-label">Community Reviews</span>
+              </div>
+            </div>
+            <div className="stat-card slide-in-left" style={{ animationDelay: '0.1s' }}>
+              <Star className="stat-card-icon" />
+              <div className="stat-card-content">
+                <span className="stat-card-value">4.8★</span>
+                <span className="stat-card-label">Average Rating</span>
+              </div>
+            </div>
+            <div className="stat-card slide-in-right" style={{ animationDelay: '0.2s' }}>
+              <Users className="stat-card-icon" />
+              <div className="stat-card-content">
+                <span className="stat-card-value">15.3K</span>
+                <span className="stat-card-label">Active Today</span>
+              </div>
+            </div>
+            <div className="stat-card slide-in-right" style={{ animationDelay: '0.3s' }}>
+              <Shield className="stat-card-icon" />
+              <div className="stat-card-content">
+                <span className="stat-card-value">96%</span>
+                <span className="stat-card-label">Trust Score</span>
+              </div>
             </div>
           </div>
         </motion.section>
