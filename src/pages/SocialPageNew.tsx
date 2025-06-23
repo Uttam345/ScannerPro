@@ -2,29 +2,11 @@ import { motion } from 'framer-motion'
 import { Users, MessageSquare, Share, Star, DollarSign, Clock, ThumbsUp, Eye, Zap, ShoppingCart, MapPin, Flame } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
-interface ActivityItem {
-  id: number;
-  user: string;
-  avatar: string;
-  action: string;
-  product: string;
-  time: string;
-  location: string;
-  likes: number;
-  comments: number;
-  image: string;
-  category: string;
-  rating?: number;
-  savings?: string;
-  isLive?: boolean;
-  isHot?: boolean;
-}
-
 const SocialPage = () => {
   const [newPost, setNewPost] = useState('')
   const [showNewActivity, setShowNewActivity] = useState(false)
 
-  const [liveActivities, setLiveActivities] = useState<ActivityItem[]>([
+  const [liveActivities, setLiveActivities] = useState([
     {
       id: 1,
       user: 'Sarah M.',
@@ -40,7 +22,8 @@ const SocialPage = () => {
       image: '🍌',
       isLive: true,
       category: 'Groceries'
-    },    {
+    },
+    {
       id: 2,
       user: 'Mike R.',
       avatar: '👨',
@@ -153,14 +136,14 @@ const SocialPage = () => {
     // Simulate live updates
     const interval = setInterval(() => {
       setShowNewActivity(true)
-      setTimeout(() => setShowNewActivity(false), 3000)    }, 8000)
+      setTimeout(() => setShowNewActivity(false), 3000)
+    }, 8000)
 
     return () => clearInterval(interval)
-  }, [])
-
-  const addLiveActivity = () => {
+  }, [])  const addLiveActivity = () => {
     if (!newPost.trim()) return
-      const newActivity = {
+    
+    const newActivity = {
       id: Date.now(),
       user: 'You',
       avatar: '😊',
@@ -345,12 +328,13 @@ const SocialPage = () => {
                     
                     <div className="activity-details">
                       <div className="product-image">{activity.image}</div>
-                      <div className="activity-meta">                        {activity.rating && (
+                      <div className="activity-meta">
+                        {activity.rating && (
                           <div className="rating-display">
                             {Array.from({ length: 5 }, (_, i) => (
                               <Star
                                 key={i}
-                                className={`star ${i < (activity.rating || 0) ? 'filled' : ''}`}
+                                className={`star ${i < activity.rating ? 'filled' : ''}`}
                               />
                             ))}
                           </div>

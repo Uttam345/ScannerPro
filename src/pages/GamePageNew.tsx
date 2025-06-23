@@ -411,6 +411,7 @@ const GamePage = () => {
       default: return '#6b7280'
     }
   }
+
   return (
     <div className="page game-page">
       <div className="container">
@@ -423,12 +424,14 @@ const GamePage = () => {
         >
           <h2 className="page-title">
             <Trophy className="page-icon" />
-            Achievement Dashboard
+            Achievement Center
           </h2>
           <p className="page-description">
-            Track your progress, unlock exclusive rewards, and climb the leaderboards in your SmartScan Pro journey
+            Unlock badges, earn points, and showcase your SmartScan Pro mastery
           </p>
-        </motion.div>        {/* Player Stats Overview */}
+        </motion.div>
+
+        {/* Player Stats Overview */}
         <motion.section
           className="player-stats-overview"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -438,8 +441,7 @@ const GamePage = () => {
           <div className="stats-grid">
             <motion.div 
               className="stat-card main-achievement-card"
-              whileHover={{ scale: 1.02, rotateY: 5 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              whileHover={{ scale: 1.02 }}
             >
               <div className="stat-header">
                 <div className="stat-icon-wrapper main">
@@ -452,19 +454,18 @@ const GamePage = () => {
               <div className="stat-content">
                 <div className="main-stat">
                   <span className="stat-value">{playerStats.totalPoints.toLocaleString()}</span>
-                  <span className="stat-label">Achievement Points</span>
+                  <span className="stat-label">Total Points</span>
                 </div>
                 <div className="rank-info">
                   <span className="rank-title">{playerStats.rank}</span>
-                  <span className="next-milestone">→ {playerStats.nextMilestone}</span>
+                  <span className="next-milestone">Next: {playerStats.nextMilestone}</span>
                 </div>
               </div>
             </motion.div>
 
             <motion.div 
               className="stat-card achievements-progress"
-              whileHover={{ scale: 1.02, rotateY: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              whileHover={{ scale: 1.02 }}
             >
               <div className="stat-header">
                 <Award className="progress-icon" />
@@ -476,13 +477,13 @@ const GamePage = () => {
                   <span className="divider">/</span>
                   <span className="total">{playerStats.totalAchievements}</span>
                 </div>
-                <span className="progress-label">Achievements Completed</span>
+                <span className="progress-label">Achievements Unlocked</span>
                 <div className="overall-progress-bar">
                   <motion.div 
                     className="progress-fill"
                     initial={{ width: 0 }}
                     animate={{ width: animateProgress ? `${playerStats.completionRate}%` : 0 }}
-                    transition={{ delay: 0.8, duration: 1.5, ease: "easeOut" }}
+                    transition={{ delay: 0.8, duration: 1.5 }}
                   />
                 </div>
               </div>
@@ -490,21 +491,20 @@ const GamePage = () => {
 
             <motion.div 
               className="stat-card milestone-card"
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              whileHover={{ scale: 1.02 }}
             >
               <div className="milestone-content">
                 <Star className="milestone-icon" />
                 <div className="milestone-info">
-                  <span className="milestone-points">{playerStats.pointsToMilestone.toLocaleString()}</span>
-                  <span className="milestone-label">Points to next level</span>
+                  <span className="milestone-points">{playerStats.pointsToMilestone}</span>
+                  <span className="milestone-label">Points to next milestone</span>
                 </div>
                 <div className="milestone-progress">
                   <motion.div 
                     className="milestone-bar"
                     initial={{ width: 0 }}
                     animate={{ width: animateProgress ? '68%' : 0 }}
-                    transition={{ delay: 1, duration: 1.2, ease: "easeOut" }}
+                    transition={{ delay: 1, duration: 1.2 }}
                   />
                 </div>
               </div>
@@ -578,7 +578,9 @@ const GamePage = () => {
               In Progress
             </button>
           </div>
-        </motion.div>        {/* Achievements Grid */}
+        </motion.div>
+
+        {/* Achievements Grid */}
         <motion.section
           className="achievements-grid-section"
           initial={{ opacity: 0, y: 30 }}
@@ -594,61 +596,34 @@ const GamePage = () => {
                 <motion.div
                   key={achievement.id}
                   className={`achievement-card ${achievement.completed ? 'completed' : 'locked'} ${achievement.rarity}`}
-                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ 
-                    delay: index * 0.05, 
-                    duration: 0.6,
-                    type: "spring",
-                    stiffness: 200
-                  }}
-                  whileHover={{ 
-                    scale: 1.03, 
-                    y: -8,
-                    rotateY: achievement.completed ? 5 : 0,
-                    transition: { type: "spring", stiffness: 400 }
-                  }}
-                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.6 }}
+                  whileHover={{ scale: 1.03, y: -8 }}
                 >
                   <div className="achievement-glow"></div>
                   
                   {/* Achievement Header */}
                   <div className="achievement-header">
-                    <motion.div 
-                      className="achievement-icon-wrapper"
-                      whileHover={{ 
-                        scale: 1.1,
-                        rotate: achievement.completed ? 360 : 0 
-                      }}
-                      transition={{ duration: 0.6 }}
-                    >
+                    <div className="achievement-icon-wrapper">
                       <IconComponent className="achievement-icon" />
                       {achievement.completed && (
-                        <motion.div 
-                          className="completion-checkmark"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.8, type: "spring", stiffness: 500 }}
-                        >
-                          ✓
-                        </motion.div>
+                        <div className="completion-checkmark">✓</div>
                       )}
-                    </motion.div>
+                    </div>
                     <div className="achievement-badges">
-                      <motion.span 
+                      <span 
                         className={`rarity-badge ${achievement.rarity}`}
                         style={{ borderColor: getRarityColor(achievement.rarity) }}
-                        whileHover={{ scale: 1.05 }}
                       >
                         {achievement.rarity}
-                      </motion.span>
-                      <motion.span 
+                      </span>
+                      <span 
                         className="difficulty-badge"
                         style={{ backgroundColor: getDifficultyColor(achievement.difficulty) }}
-                        whileHover={{ scale: 1.05 }}
                       >
                         {achievement.difficulty}
-                      </motion.span>
+                      </span>
                     </div>
                   </div>
 
@@ -657,27 +632,16 @@ const GamePage = () => {
                     <h3 className="achievement-title">{achievement.title}</h3>
                     <p className="achievement-description">{achievement.description}</p>
                     
-                    <motion.div 
-                      className="achievement-rewards"
-                      whileHover={{ scale: 1.02 }}
-                    >
+                    <div className="achievement-rewards">
                       <Gift className="reward-icon" />
                       <span className="reward-text">{achievement.reward}</span>
-                    </motion.div>
+                    </div>
 
                     <div className="achievement-requirements">
                       <span className="requirements-label">Requirements:</span>
                       <ul className="requirements-list">
                         {achievement.requirements.map((req, idx) => (
-                          <motion.li 
-                            key={idx} 
-                            className="requirement"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.6 + idx * 0.1 }}
-                          >
-                            {req}
-                          </motion.li>
+                          <li key={idx} className="requirement">{req}</li>
                         ))}
                       </ul>
                     </div>
@@ -686,25 +650,20 @@ const GamePage = () => {
                   {/* Achievement Progress */}
                   <div className="achievement-progress">
                     {achievement.completed ? (
-                      <motion.div 
-                        className="completion-info"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                      >
+                      <div className="completion-info">
                         <div className="completed-status">
                           <Trophy className="trophy-icon" />
-                          <span className="completed-text">Achievement Unlocked!</span>
+                          <span className="completed-text">Completed!</span>
                         </div>
                         <div className="unlock-info">
-                          <span className="points-earned">+{achievement.points.toLocaleString()} points</span>
+                          <span className="points-earned">+{achievement.points} points</span>
                           <span className="unlock-date">Unlocked {achievement.unlockedDate}</span>
                         </div>
-                      </motion.div>
+                      </div>
                     ) : (
                       <div className="progress-info">
                         <div className="progress-header">
-                          <span className="progress-text">{achievement.progress.toLocaleString()}/{achievement.maxProgress.toLocaleString()}</span>
+                          <span className="progress-text">{achievement.progress}/{achievement.maxProgress}</span>
                           <span className="progress-percentage">{Math.round(progressPercentage)}%</span>
                         </div>
                         <div className="progress-bar">
@@ -712,15 +671,11 @@ const GamePage = () => {
                             className="progress-fill"
                             initial={{ width: 0 }}
                             animate={{ width: animateProgress ? `${progressPercentage}%` : 0 }}
-                            transition={{ 
-                              delay: 0.7 + index * 0.05, 
-                              duration: 1,
-                              ease: "easeOut"
-                            }}
+                            transition={{ delay: 0.7 + index * 0.05, duration: 1 }}
                           />
                         </div>
                         <div className="potential-reward">
-                          <span className="potential-points">Earn {achievement.points.toLocaleString()} points</span>
+                          <span className="potential-points">Earn {achievement.points} points</span>
                         </div>
                       </div>
                     )}
