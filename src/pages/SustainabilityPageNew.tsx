@@ -229,13 +229,6 @@ const SustainabilityPage = () => {
     impactRating: 'Exceptional'
   }
 
-  const weeklyTrends = [
-    { week: 'Week 1', score: 78 },
-    { week: 'Week 2', score: 82 },
-    { week: 'Week 3', score: 88 },
-    { week: 'Week 4', score: 95 }
-  ]
-
   useEffect(() => {
     const timer = setTimeout(() => setAnimateProgress(true), 500)
     return () => clearTimeout(timer)

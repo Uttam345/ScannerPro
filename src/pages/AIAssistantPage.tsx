@@ -1,18 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-  MessageCircle, 
   Mic, 
   Send, 
   Bot, 
   User, 
-  Zap,
   ShoppingCart,
   Sparkles,
   TrendingUp,
   Heart,
   Star,
-  ChevronDown,
   Coffee,
   Home,
   Baby,

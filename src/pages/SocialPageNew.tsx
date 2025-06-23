@@ -153,6 +153,7 @@ const SocialPage = () => {
       product: newPost,
       time: 'now',
       location: 'Your Location',
+      rating: 0,
       likes: 0,
       comments: 0,
       image: '✨',
