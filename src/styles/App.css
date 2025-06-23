@@ -95,7 +95,7 @@ body {
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -215,7 +215,7 @@ body {
 }
 
 .nav-content {
-  max-width: 1200px;
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -268,7 +268,7 @@ body {
 /* Container and Layout Styles */
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 var(--spacing-xl);
   display: flex;
@@ -350,7 +350,7 @@ body {
   display: grid;
   gap: var(--spacing-xl);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -450,7 +450,7 @@ body {
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 113, 206, 0.3);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
 }
 
 .hero-section::before {
@@ -543,7 +543,7 @@ body {
 /* Stats Section */
 .stats-section {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin-bottom: var(--spacing-xxl);
 }
 
@@ -613,7 +613,7 @@ body {
 /* Features Section */
 .features-section {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin-bottom: var(--spacing-xxl);
 }
 
@@ -773,7 +773,7 @@ body {
 /* Quick Actions Section */
 .quick-actions-section {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
 }
 
 .quick-actions-card {
