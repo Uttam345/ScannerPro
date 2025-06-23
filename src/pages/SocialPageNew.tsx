@@ -140,7 +140,9 @@ const SocialPage = () => {
     }, 8000)
 
     return () => clearInterval(interval)
-  }, [])  const addLiveActivity = () => {
+  }, []);
+
+  const addLiveActivity = () => {
     if (!newPost.trim()) return
     
     const newActivity = {
